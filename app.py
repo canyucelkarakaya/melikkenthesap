@@ -4,31 +4,8 @@ import pandas as pd
 # Excel dosyasını oku
 df = pd.read_excel('hesaptakip.xlsx')
 
-# Toplam aidat gelirlerini hesapla
-toplam_aidat_geliri = df['AİDAT GELİR'].sum()
-
-# Toplam demirbaş gelirlerini hesapla
-toplam_demirbas_geliri = df['DEMİRBAŞ GELİR'].sum()
-
-# Toplam aidat giderlerini hesapla
-toplam_aidat_gider = df['AİDAT GİDER'].sum()
-
-# Toplam demirbaş giderlerini hesapla
-toplam_demirbas_gider = df['DEMİRBAŞ GİDER'].sum()
-
-# Genel hesap sonucunu hesapla
-genel_hesap = (toplam_aidat_geliri + toplam_demirbas_geliri) - (toplam_aidat_gider + toplam_demirbas_gider)
-
-
-
-# Streamlit uygulamasını oluştur
-st.title("MELİKKENT B APARTMANI")
-st.header("GENEL HESAP:")
-
-# Genel hesap sonucunu büyük yazı ve kalın olarak göster
-st.markdown(f"<h1 style='text-align:center;color:#ff5733;'>{genel_hesap:.2f}</h1>", unsafe_allow_html=True)
-
-
+# "GELİR NEDENİ" sütununda "2021 YILINDAN DEVİR" ve "2022 YILINDAN DEVİR" değerlerini içeren satırları filtrele
+df = df[~df['GELİR NEDENİ'].isin(["2021 YILINDAN DEVİR", "2022 YILINDAN DEVİR"])]
 
 # Toplam aidat gelirlerini hesapla
 toplam_aidat_geliri = df['AİDAT GELİR'].sum()
@@ -39,14 +16,6 @@ toplam_aidat_gider = df['AİDAT GİDER'].sum()
 # Aidat hesabını hesapla
 aidat_hesabi = toplam_aidat_geliri - toplam_aidat_gider
 
-# Streamlit uygulamasını oluştur
-
-st.header("AİDAT HESABI:")
-
-# Aidat hesabını göster
-
-st.markdown(f"<h1 style='text-align:center;color:#ff5733;'>{aidat_hesabi:.2f}</h1>", unsafe_allow_html=True)
-
 # Toplam demirbaş gelirlerini hesapla
 toplam_demirbas_geliri = df['DEMİRBAŞ GELİR'].sum()
 
@@ -56,16 +25,33 @@ toplam_demirbas_gider = df['DEMİRBAŞ GİDER'].sum()
 # Demirbaş hesabını hesapla
 demirbas_hesabi = toplam_demirbas_geliri - toplam_demirbas_gider
 
-# Streamlit uygulamasını oluştur
+genel_hesap = aidat_hesabi + demirbas_hesabi
 
+# Streamlit uygulamasını oluştur
+st.title("MELİKKENT B APARTMANI")
+st.header("GENEL HESAP:")
+
+# Genel hesap sonucunu büyük yazı ve kalın olarak göster
+st.markdown(f"<h1 style='text-align:center;color:#ff5733;'>{genel_hesap:.2f}</h1>", unsafe_allow_html=True)
+
+# Streamlit uygulamasını oluştur
+st.header("AİDAT HESABI:")
+
+# Aidat hesabını göster
+st.markdown(f"<h1 style='text-align:center;color:#ff5733;'>{aidat_hesabi:.2f}</h1>", unsafe_allow_html=True)
+
+# Streamlit uygulamasını oluştur
 st.header("DEMİRBAŞ HESABI:")
 
 # Demirbaş hesabını göster
-
 st.markdown(f"<h1 style='text-align:center;color:#ff5733;'>{demirbas_hesabi:.2f}</h1>", unsafe_allow_html=True)
 
 
 st.write("///////////////////////////////////////////////////////////////////////")
+
+# Excel dosyasını oku
+df = pd.read_excel('hesaptakip.xlsx')
+
 # Sayfayı 2 bölüme bölelim
 sol_bolum, sag_bolum = st.columns([2, 1])
 
